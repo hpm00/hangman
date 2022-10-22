@@ -27,7 +27,8 @@ class Game
   
   def new_game
     random_word
-    
+    display_letter until @guesses_remaining == 0 || @dashes.include?("_") == false
+    outro
   end
 
   def load_game; end
@@ -44,6 +45,7 @@ class Game
     @dashes = ''
     @dashes << '_' until @dashes.length == word.length - 1
     puts @dashes
+    puts "Incorrect guesses remaining: #{@guesses_remaining}"
   end
 
   def get_letter
@@ -74,4 +76,12 @@ class Game
     puts "Incorrect guesses remaining: #{@guesses_remaining}"
   end
 
+  def outro
+    puts winner if @dashes.include?("_") == false && @guesses_remaining != 0
+    puts loser if @guesses_remaining == 0
+    intro
+  end
+    
 end
+
+Game.new
