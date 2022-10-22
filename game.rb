@@ -34,7 +34,6 @@ class Game
     words = []
     File.open("word_list.txt").readlines.each { |line| words.push(line) if line.length.between?(6, 12) }
     @word = words.sample
-    puts @word
     create_blank_spaces(@word)
   end
 
