@@ -40,4 +40,23 @@ class Game
     puts @word
     create_blank_spaces(@word)
   end
+
+  def create_blank_spaces(word)
+    @dashes = ''
+    @dashes << '_' until @dashes.length == word.length - 1
+    puts @dashes
+  end
+
+  def get_letter
+    puts instruction 
+    loop do
+      @letter = gets.chomp
+      break if @letter.match?(/^[\D]$/) && @available_letters.include?(@letter)
+      puts invalid_guess
+    end
+    @available_letters.delete(@letter)
+    @available_letters
+    @letters_guessed.push(@letter)
+  end
+  
 end
