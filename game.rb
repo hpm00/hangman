@@ -1,8 +1,6 @@
-require_relative 'display.rb'
-require_relative 'color.rb'
-
 class Game
   include Display
+  include Database
 
   def initialize
     @available_letters = ('a'..'z').to_a
@@ -28,18 +26,15 @@ class Game
     
   def new_game
     random_word
-    display_letter until @guesses_remaining == 0 || @dashes.include?("_") == false
-    outro
-  end
+    display_letter until @guesses_remaining == 0 || @dashes.include?("_") == false || @letter == 'save'
+    outro 
+  end 
 
-  def load_game;
-  end
-    
-  # -------------------------------------------------------------------------------------
   def random_word
     words = []
     File.open("word_list.txt").readlines.each { |line| words.push(line) if line.length.between?(6, 12) }
     @word = words.sample
+    puts @word
     create_blank_spaces(@word)
   end
 
@@ -53,19 +48,20 @@ class Game
   def get_letter
     instruction 
     loop do
-      @letter = gets.chomp
-      break if @letter.match?(/^[\D]$/) && @available_letters.include?(@letter)
-      invalid_guess
+      @letter = gets.chomp.downcase
+      break if @letter == 'save' || @letter.match?(/^[\D]$/) && @available_letters.include?(@letter)
+      invalid_guess 
     end
-    @available_letters.delete(@letter)
-    @letters_guessed.push(@letter)
+    @available_letters.delete(@letter) unless @letter == 'save'
+    @letters_guessed.push(@letter) unless @letter == 'save'
   end
 
   def display_letter
-    get_letter
+    get_letter 
+    return save_current_game if @letter == 'save'
     characters = @word.split("")
     characters.each_with_index do |item, index|
-      @dashes[index] = @letter.yellow if characters[index] == @letter
+      @dashes[index] = @letter if characters[index] == @letter
     end
     if characters.include?(@letter) == false
       @guesses_remaining -= 1 
@@ -81,13 +77,7 @@ class Game
   def outro
     puts winner if @dashes.include?("_") == false && @guesses_remaining != 0
     puts loser if @guesses_remaining == 0
+    puts saved_message if @letter == 'save'
     intro
   end
-
-  def save_game 
-  end
-
-  
 end
-
-Game.new
