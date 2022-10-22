@@ -1,4 +1,3 @@
-require_relative 'color.rb'
 module Display
 
   def title 
@@ -15,7 +14,7 @@ module Display
   end
 
   def saved_message
-    puts "Your game has been saved. Remember what you named your game."
+    puts "\nYour game has been saved. Remember what you named your game.".blue
   end 
 
   def invalid_guess
@@ -36,6 +35,10 @@ module Display
 
   def loser
     puts "\nYou didn't guess the word. Better luck next time."
+  end
+
+  def save_game
+    puts "\nEnter a name for saved game.".green
   end
   
 end
