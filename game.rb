@@ -1,4 +1,5 @@
 require_relative 'display.rb'
+require_relative 'color.rb'
 
 class Game
   include Display
@@ -24,36 +25,37 @@ class Game
     puts "Invalid Selection. Please enter '1' or '2'."
     user_selection
   end
-  
+    
   def new_game
     random_word
     display_letter until @guesses_remaining == 0 || @dashes.include?("_") == false
     outro
   end
 
-  def load_game; end
-
+  def load_game;
+  end
+    
+  # -------------------------------------------------------------------------------------
   def random_word
     words = []
     File.open("word_list.txt").readlines.each { |line| words.push(line) if line.length.between?(6, 12) }
     @word = words.sample
-    puts @word
     create_blank_spaces(@word)
   end
 
   def create_blank_spaces(word)
     @dashes = ''
     @dashes << '_' until @dashes.length == word.length - 1
-    puts @dashes
-    puts "Incorrect guesses remaining: #{@guesses_remaining}"
+    puts @dashes.yellow
+    puts "Incorrect guesses remaining: #{@guesses_remaining}".blue
   end
 
   def get_letter
-    puts instruction 
+    instruction 
     loop do
       @letter = gets.chomp
       break if @letter.match?(/^[\D]$/) && @available_letters.include?(@letter)
-      puts invalid_guess
+      invalid_guess
     end
     @available_letters.delete(@letter)
     @letters_guessed.push(@letter)
@@ -63,7 +65,7 @@ class Game
     get_letter
     characters = @word.split("")
     characters.each_with_index do |item, index|
-      @dashes[index] = @letter if characters[index] == @letter
+      @dashes[index] = @letter.yellow if characters[index] == @letter
     end
     if characters.include?(@letter) == false
       @guesses_remaining -= 1 
@@ -71,9 +73,9 @@ class Game
     else
       puts correct_letter_message
     end
-    puts @dashes
-    puts "Letters guessed: #{@letters_guessed.join(", ")}"
-    puts "Incorrect guesses remaining: #{@guesses_remaining}"
+    puts @dashes.yellow
+    puts "Letters guessed: #{@letters_guessed.join(", ")}".magenta
+    puts "Incorrect guesses remaining: #{@guesses_remaining}".blue
   end
 
   def outro
@@ -81,7 +83,11 @@ class Game
     puts loser if @guesses_remaining == 0
     intro
   end
-    
+
+  def save_game 
+  end
+
+  
 end
 
 Game.new
