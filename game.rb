@@ -7,7 +7,6 @@ class Game
     @available_letters = ('a'..'z').to_a
     @letters_guessed = []
     @guesses_remaining = 10
-    @mode = nil
     play_game
   end
 
@@ -55,8 +54,24 @@ class Game
       puts invalid_guess
     end
     @available_letters.delete(@letter)
-    @available_letters
     @letters_guessed.push(@letter)
   end
-  
+
+  def display_letter
+    get_letter
+    characters = @word.split("")
+    characters.each_with_index do |item, index|
+      @dashes[index] = @letter if characters[index] == @letter
+    end
+    if characters.include?(@letter) == false
+      @guesses_remaining -= 1 
+      puts wrong_guess_message
+    else
+      puts correct_letter_message
+    end
+    puts @dashes
+    puts "Letters guessed: #{@letters_guessed.join(", ")}"
+    puts "Incorrect guesses remaining: #{@guesses_remaining}"
+  end
+
 end
