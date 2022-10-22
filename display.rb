@@ -24,7 +24,7 @@ module Display
   end 
 
   def invalid_guess
-    "Invalid. Please enter a single letter only. "
+    "Invalid. Please enter a single, non-selected letter only."
   end 
 
   def wrong_guess_message
