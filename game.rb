@@ -2,7 +2,7 @@ class Game
   include Display
   
   def initialize
-    @available_letters = 
+    @available_letters = ('a'..'z').to_a
     @letters_guessed = []
     @guesses_remaining = 10
     play_game
